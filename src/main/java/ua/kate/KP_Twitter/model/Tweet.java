@@ -6,7 +6,7 @@ import java.util.Set;
 
 public class
 
-Tweet {
+Tweet implements PersistenceEntity {
 
     private Long tweetId;
     private User user;
@@ -38,11 +38,12 @@ Tweet {
         this.retweets = retweets;
     }
 
-    public Long getTweetId() {
+    public Long getId() {
         return tweetId;
     }
 
-    public void setTweetId(Long tweetId) {
+    @Override
+    public void setId(Long tweetId) {
         this.tweetId = tweetId;
     }
 

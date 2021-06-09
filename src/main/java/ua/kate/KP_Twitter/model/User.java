@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-public class User {
+public class User implements PersistenceEntity {
 
     private Long userId;
     private String login;
@@ -42,8 +42,13 @@ public class User {
     }
 
 
-    public Long getUserId() {
+    public Long getId() {
         return userId;
+    }
+
+    @Override
+    public void setId(Long userId) {
+        this.userId = userId;
     }
 
     public String getLogin() {
@@ -64,10 +69,6 @@ public class User {
 
     public String getAbout() {
         return about;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
     }
 
     public void setLogin(String login) {
@@ -96,6 +97,14 @@ public class User {
 
     public Set<User> getFollowing() {
         return following;
+    }
+
+    public void setFollowers(Set<User> followers) {
+        this.followers = followers;
+    }
+
+    public void setFollowing(Set<User> following) {
+        this.following = following;
     }
 
     public void addFollowers(User follower) {
@@ -129,4 +138,5 @@ public class User {
     public int hashCode() {
         return Objects.hash(userId, login);
     }
+
 }
