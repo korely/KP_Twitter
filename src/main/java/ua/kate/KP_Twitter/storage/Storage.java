@@ -3,10 +3,7 @@ package ua.kate.KP_Twitter.storage;
 import ua.kate.KP_Twitter.model.Tweet;
 import ua.kate.KP_Twitter.model.User;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public final class Storage {
     private static final Map<Long, Tweet> tweetStorage = new HashMap<>();
@@ -72,7 +69,7 @@ public final class Storage {
         return createUserCopy(userStorage.get(key));
     }
 
-    public Tweet getTweetByKey(Long key) {
+    public static Tweet getTweetByKey(Long key) {
         return createTweetCopy(tweetStorage.get(key));
     }
 
@@ -89,8 +86,7 @@ public final class Storage {
 
     public static Long putTweetInStorage(Tweet tweet) {
         Tweet toBeSaved = createTweetCopy(tweet);
-        assert toBeSaved != null;
-        if (toBeSaved.getId() == null) {
+        if (Objects.requireNonNull(toBeSaved).getId() == null) {
             toBeSaved.setId(++tweetSequence);
             tweet.setId(toBeSaved.getId());
         }
