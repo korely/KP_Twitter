@@ -6,17 +6,25 @@ import ua.kate.KP_Twitter.model.User;
 import java.util.*;
 
 public final class Storage {
-    private static final Map<Long, Tweet> tweetStorage = new HashMap<>();
-    private static final Map<Long, User> userStorage = new HashMap<>();
+    private final Map<Long, Tweet> tweetStorage = new HashMap<>();
+    private final Map<Long, User> userStorage = new HashMap<>();
 
 
-    private static long userSequence = 0;
-    private static long tweetSequence = 0;
+    private long userSequence = 0;
+    private long tweetSequence = 0;
 
     private Storage() {
     }
 
-    public static Set<User> getUsers() {
+    private static class StorageHolder{
+        private static final Storage storage = new Storage();
+    }
+
+    public static Storage getInstance(){
+        return StorageHolder.storage;
+    }
+
+    public Set<User> getUsers() {
         Set<User> result = new HashSet<>();
         for (User user : userStorage.values()) {
 //            User userCopy = createUserCopy(user);
@@ -41,7 +49,7 @@ public final class Storage {
         return null;
     }
 
-    public static Set<Tweet> getTweets() {
+    public Set<Tweet> getTweets() {
         Set<Tweet> result = new HashSet<>();
         for (Tweet tweet : tweetStorage.values()) {
             result.add(createTweetCopy(tweet));
@@ -65,16 +73,16 @@ public final class Storage {
         return null;
     }
 
-    public static User getUserByKey(Long key) {
+    public User getUserByKey(Long key) {
         return createUserCopy(userStorage.get(key));
     }
 
-    public static Tweet getTweetByKey(Long key) {
+    public Tweet getTweetByKey(Long key) {
         return createTweetCopy(tweetStorage.get(key));
     }
 
 
-    public static Long putUserInStorage(User user) {
+    public Long putUserInStorage(User user) {
         User toBeSaved = createUserCopy(user);
         if (toBeSaved.getId() == null) {
             toBeSaved.setId(++userSequence);
@@ -84,7 +92,7 @@ public final class Storage {
         return toBeSaved.getId();
     }
 
-    public static Long putTweetInStorage(Tweet tweet) {
+    public Long putTweetInStorage(Tweet tweet) {
         Tweet toBeSaved = createTweetCopy(tweet);
         if (Objects.requireNonNull(toBeSaved).getId() == null) {
             toBeSaved.setId(++tweetSequence);
@@ -94,11 +102,11 @@ public final class Storage {
         return toBeSaved.getId();
     }
 
-    public static void removeUserByKey(Long key) {
+    public void removeUserByKey(Long key) {
         userStorage.remove(key);
     }
 
-    public static void removeTweetByKey(Long key) {
+    public void removeTweetByKey(Long key) {
         tweetStorage.remove(key);
     }
 

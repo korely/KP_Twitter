@@ -11,27 +11,27 @@ public class UserDaoInMemoryImpl implements UserDao {
 
     @Override
     public Long save(User model) {
-        return Storage.putUserInStorage(model);
+        return Storage.getInstance().putUserInStorage(model);
     }
 
     @Override
     public Set<User> getAll() {
-        return Storage.getUsers();
+        return Storage.getInstance().getUsers();
     }
 
     @Override
     public Optional<User> findById(Long id) {
-        return Optional.of(Storage.getUserByKey(id));
+        return Optional.of(Storage.getInstance().getUserByKey(id));
     }
 
     @Override
     public void updateById(Long id, User model) {
         model.setId(id);
-        Storage.putUserInStorage(model);
+        Storage.getInstance().putUserInStorage(model);
     }
 
     @Override
     public void deleteById(Long id) {
-        Storage.removeUserByKey(id);
+        Storage.getInstance().removeUserByKey(id);
     }
 }
