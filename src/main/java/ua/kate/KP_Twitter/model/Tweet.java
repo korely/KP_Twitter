@@ -6,7 +6,7 @@ import java.util.Set;
 
 public class
 
-Tweet implements PersistenceEntity {
+Tweet implements PersistenceEntity, Comparable<Tweet> {
 
     private Long tweetId;
     private User user;
@@ -25,6 +25,11 @@ Tweet implements PersistenceEntity {
         this.content = content;
         this.mentionedUsers = mentionedUser;
         //resolveMentionedUsers(content);
+    }
+
+    public Tweet(User user, String content) {
+        this.user = user;
+        this.content = content;
     }
 
     public Tweet(Long tweetId, User user, Long referenceTweetId, LocalDateTime datePosted, String content, Set<User> mentionedUser, Set<User> likes, Set<Tweet> retweets) {
@@ -105,12 +110,11 @@ Tweet implements PersistenceEntity {
 
     @Override
     public String toString() {
-        return "Tweet{" +
-                "tweetId=" + tweetId +
-                ", user=" + user +
-                ", referenceTweetId=" + referenceTweetId +
-                ", content='" + content + '\'' +
-                '}';
+        return "\n" +
+                "[tweetId=" + tweetId + "]" +
+                 user + "\n" +
+                "referenceTweetId='" + referenceTweetId + '\'' + ", " +
+                "content='" + content + '\'';
     }
 
     @Override
@@ -131,5 +135,10 @@ Tweet implements PersistenceEntity {
     @Override
     public int hashCode() {
         return Objects.hash(tweetId, user, referenceTweetId, content);
+    }
+
+    @Override
+    public int compareTo(Tweet o) {
+        return this.getId().compareTo(o.tweetId);
     }
 }

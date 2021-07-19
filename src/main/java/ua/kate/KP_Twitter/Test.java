@@ -3,10 +3,7 @@ package ua.kate.KP_Twitter;
 import ua.kate.KP_Twitter.model.Tweet;
 import ua.kate.KP_Twitter.model.User;
 import ua.kate.KP_Twitter.model.UserFeed;
-import ua.kate.KP_Twitter.persistence.TweetDao;
-import ua.kate.KP_Twitter.persistence.TweetDaoInMemoryImpl;
-import ua.kate.KP_Twitter.persistence.UserDao;
-import ua.kate.KP_Twitter.persistence.UserDaoInMemoryImpl;
+import ua.kate.KP_Twitter.persistence.*;
 
 import java.util.*;
 
@@ -14,78 +11,93 @@ public class Test {
 
     public static void main(String[] args) {
 
+//CREATE
+
         User user = new User("John55", "John");
-        user.setId(1L);
+        user.setId(25L);
+        user.setAbout("My name is John");
 
         User user2 = new User("Eric434", "Eric");
-        user2.setId(2L);
+        user2.setId(24L);
 
-        User user3 = new User("New3434", "NewOne");
-        user3.setId(3L);
+        User user3 = new User("New3434", "NewOne", "About description");
+        user3.setId(8L);
 
-        Tweet tweet = new Tweet(user, "Hello everyone", null);
+        User userEricHaha = new User("Eric434", "RealEric", "Eric about hahaha");
+        userEricHaha.setId(105L);
+
+        Tweet tweet = new Tweet(user, "Hello everyone");
         tweet.setId(11L);
 
         Tweet tweet2 = new Tweet(user2, "Hello @Eric434", new HashSet<>(Collections.singletonList(user)));
-        tweet2.setId(22L);
-//
-//        System.out.println(user);
-//        System.out.println(user2);
-//        System.out.println(tweet);
-//        System.out.println(tweet2);
-//
+        tweet2.setId(15L);
+
+        Tweet tweet2FromMain = new Tweet(user3, "Hello again");
+        tweet2FromMain.setId(25L);
+
+        Tweet newTweet = new Tweet(user, "This is an absolutely new about");
+        tweet2FromMain.setId(435L);
+
         UserFeed userFeed = new UserFeed(new HashSet<>(Arrays.asList(tweet, tweet2)), user.getId(), false);
         UserFeed user2Feed = new UserFeed(new HashSet<>(Collections.singletonList(tweet2)), user2.getId(), false);
 
-//        System.out.println(userFeed);
-//        System.out.println(user2Feed);
 
-
+        //CHANGE DAO
         ///////////////////////////////////////////////////////////////////
-        UserDao userDao = new UserDaoInMemoryImpl();
+        UserDao userDao = new UserDaoJdbcImpl();
         //////////////////////////////////////////////////////////////////
 
-        userDao.save(user);
-        userDao.save(user2);
+//        Tweet karlTweet = new Tweet(userDao.findById(74L).get(), "This is not new about");
 
-        Set<User> users = userDao.getAll();
-        System.out.println(users);
+        //ADD
+//        userDao.add(user3);
+//        System.out.println(user3);
+//        userDao.add(user2);
 
-        Optional<User> user2FromDB = userDao.findById(user2.getId());
 
-        User user2FromMain = new User ("Eric434", "RealEric");
+//        //FINDUSERBYID
+//        Optional<User> user2FromDB = userDao.findById(4L);
+//        System.out.println(user2FromDB);
 
-        userDao.updateById(user2.getId(), user2FromMain);
+        //UPDATEUBYID
 
-        userDao.deleteById(user.getId());
+//        System.out.println(userDao.findById(24L));
+//        userDao.updateById(24L, userEricHaha);
+//        System.out.println(userDao.findById(24L));
 
-        users = userDao.getAll();
-        System.out.println(users);
+        //DELETEBYID
+//        userDao.deleteById(user.getId());
 
-        System.out.println("end for user");
+        //GETALL
+        System.out.println(userDao.getAll());
 
+        System.out.println("-----------------------------");
         ///////////////////////////////////////////////////////////////////
-        TweetDao tweetDao = new TweetDaoInMemoryImpl();
+        TweetDao tweetDao = new TweetDaoJdbcImpl();
         //////////////////////////////////////////////////////////////////
 
-        tweetDao.save(tweet);
-        tweetDao.save(tweet2);
+        //ADD
+//        tweetDao.add(tweet);
+//        tweetDao.add(tweet2);
+//        tweetDao.add(tweet2FromMain);
+//        tweetDao.add(karlTweet);
 
-        Set<Tweet> tweets = tweetDao.getAll();
-        System.out.println(tweets);
+        //FINDUSERBYID
 
-        Optional<Tweet> tweet2FromDB = tweetDao.findById(tweet2.getId());
+//        Optional<Tweet> tweet2FromDB = userDao.findById(25);
+//        System.out.println(tweet2FromDB);
 
-        Tweet tweet2FromMain = new Tweet (user3, "Hello again", null);
+        //UPDATEUBYID
+//        System.out.println(tweetDao.findById(11L));
+//        tweetDao.updateById(11L, tweet2FromMain);
+//        System.out.println(tweetDao.findById(11L));
 
-        tweetDao.updateById(tweet2.getId(), tweet2FromMain);
 
-        tweetDao.deleteById(tweet.getId());
+        //DELETEBYID
+//        tweetDao.deleteById(19L);
 
-        tweets = tweetDao.getAll();
-        System.out.println(tweets);
-
-        System.out.println("end for tweet");
+        //GETALL
+        System.out.println(tweetDao.getAll());
     }
 
 }
