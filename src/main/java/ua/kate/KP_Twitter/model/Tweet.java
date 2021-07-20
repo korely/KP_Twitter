@@ -43,6 +43,12 @@ Tweet implements PersistenceEntity, Comparable<Tweet> {
         this.retweets = retweets;
     }
 
+    public Tweet(long id, String content, User user) {
+        this.tweetId = id;
+        this.user = user;
+        this.content = content;
+    }
+
     public Long getId() {
         return tweetId;
     }

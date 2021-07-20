@@ -10,32 +10,38 @@ import java.util.TreeSet;
 
 public class TweetDaoJdbcImpl implements TweetDao {
 
-    private static final String getLastId = "SELECT MAX(tweetId) FROM TWEET";
-    Connection connection = new h2Connection().getConnection();
+    Connection connection;
+    {
+        try {
+            connection = H2Connection.getInstance().getConnection();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
 
     @Override
     public Long add(Tweet model) {
+        Long key = null;
         String sql = "INSERT INTO TWEET (userId" +
                 ", content) VALUES (?, ?)";
 
         try {
-            PreparedStatement statement1 = connection.prepareStatement(sql);
-            statement1.setLong(1, model.getUser().getId());
-            statement1.setString(2, model.getContent());
-            int result = statement1.executeUpdate();
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setLong(1, model.getUser().getId());
+            statement.setString(2, model.getContent());
+            int result = statement.executeUpdate();
             System.out.println("Tweet " + model.getContent() + " was added");
             if (result == 1) {
-                Statement statement2 = connection.createStatement();
-                ResultSet rs = statement2.executeQuery(getLastId);
-                if (rs.next()) {
-                    return rs.getLong(1);
+                ResultSet keys = statement.getGeneratedKeys();
+                if (keys.next()){
+                    key = keys.getLong(1);
                 }
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
 
-        return null;
+        return key;
     }
 
     @Override
@@ -58,7 +64,7 @@ public class TweetDaoJdbcImpl implements TweetDao {
                 Optional<User> user = udji.findById(userId);
                 
                 if(user.isPresent()){
-                    tweet = saveTweetFromDb(id, content, user.get());
+                    tweet = new Tweet(id, content, user.get());
                 }
                 
                 allTweets.add(tweet);
@@ -91,7 +97,7 @@ public class TweetDaoJdbcImpl implements TweetDao {
                     Optional<User> user = udji.findById(userId);
 
                     if(user.isPresent()){
-                        tweet = saveTweetFromDb(id, content, user.get());
+                        tweet = new Tweet(id, content, user.get());
                     }
                     if (tweet != null) {
                         tweetOpt = Optional.of(tweet);
@@ -132,13 +138,5 @@ public class TweetDaoJdbcImpl implements TweetDao {
                 SQLException throwables) {
             throwables.printStackTrace();
         }
-    }
-
-    private Tweet saveTweetFromDb(long id, String content, User user) {
-        Tweet tweet = new Tweet();
-        tweet.setId(id);
-        tweet.setUser(user);
-        tweet.setContent(content);
-        return tweet;
     }
 }

@@ -52,6 +52,13 @@ public class User implements PersistenceEntity, Comparable<User> {
         this.following = following;
     }
 
+    public User(long id, String login, String nickname, String about) {
+        this.userId = id;
+        this.login = login;
+        this.nickname = nickname;
+        this.about = about;
+    }
+
 
     public Long getId() {
         return userId;

@@ -7,35 +7,42 @@ import java.util.*;
 
 public class UserDaoJdbcImpl implements UserDao {
 
-    private static final String getLastId = "SELECT MAX(userId) FROM USER";
-    Connection connection = new h2Connection().getConnection();
+    Connection connection;
+
+    {
+        try {
+            connection = H2Connection.getInstance().getConnection();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
 
     @Override
     public Long add(User model) {
 
+        Long key = null;
         String sql = "INSERT INTO USER (login" +
                 ", nickname" +
                 ", about) VALUES (?, ?, ?)";
 
         try {
-            PreparedStatement statement1 = connection.prepareStatement(sql);
-            statement1.setString(1, model.getLogin());
-            statement1.setString(2, model.getNickname());
-            statement1.setString(3, model.getAbout());
-            int result = statement1.executeUpdate();
+            PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            statement.setString(1, model.getLogin());
+            statement.setString(2, model.getNickname());
+            statement.setString(3, model.getAbout());
+            int result = statement.executeUpdate();
             System.out.println("User " + model.getNickname() + " was added");
             if (result == 1) {
-                Statement statement2 = connection.createStatement();
-                ResultSet rs = statement2.executeQuery(getLastId);
-                if (rs.next()) {
-                    return rs.getLong(1);
+                ResultSet keys = statement.getGeneratedKeys();
+                if (keys.next()){
+                    key = keys.getLong(1);
                 }
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
 
-        return null;
+        return key;
     }
 
     @Override
@@ -54,7 +61,7 @@ public class UserDaoJdbcImpl implements UserDao {
                 String nickname = rs.getString("nickname");
                 String about = rs.getString("about");
 
-                User user = saveUserFromDb(id, login, nickname, about);
+                User user = new User(id, login, nickname, about);
 
                 allUsers.add(user);
             }
@@ -82,7 +89,7 @@ public class UserDaoJdbcImpl implements UserDao {
                     String nickname = rs.getString("nickname");
                     String about = rs.getString("about");
 
-                    User user = saveUserFromDb(id, login, nickname, about);
+                    User user = new User(id, login, nickname, about);
                     userOpt = Optional.of(user);
 
                 }
@@ -122,14 +129,5 @@ public class UserDaoJdbcImpl implements UserDao {
                 SQLException throwables) {
             throwables.printStackTrace();
         }
-    }
-
-    private User saveUserFromDb(long id, String login, String nickname, String about) {
-        User user = new User();
-        user.setId(id);
-        user.setLogin(login);
-        user.setNickname(nickname);
-        user.setAbout(about);
-        return user;
     }
 }
