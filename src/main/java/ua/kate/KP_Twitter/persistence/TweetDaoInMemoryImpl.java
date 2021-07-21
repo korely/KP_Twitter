@@ -8,7 +8,7 @@ import java.util.Set;
 
 public class TweetDaoInMemoryImpl implements TweetDao {
     @Override
-    public Long save(Tweet model) {
+    public Long add(Tweet model) {
         return Storage.getInstance().putTweetInStorage(model);
     }
 

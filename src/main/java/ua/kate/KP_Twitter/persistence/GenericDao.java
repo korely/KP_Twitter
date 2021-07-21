@@ -8,9 +8,9 @@ import java.util.Set;
 public interface GenericDao <T extends PersistenceEntity> {
 
     //CREATE
-    Long save(T model);
+    Long add(T model);
     //READ
-    Set<T> getAll();
+    Set <T> getAll();
     Optional<T> findById(Long id);
     //UPDATE
     void updateById(Long id, T model);

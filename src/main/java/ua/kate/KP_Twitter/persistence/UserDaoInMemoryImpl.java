@@ -10,7 +10,7 @@ public class UserDaoInMemoryImpl implements UserDao {
 
 
     @Override
-    public Long save(User model) {
+    public Long add(User model) {
         return Storage.getInstance().putUserInStorage(model);
     }
 

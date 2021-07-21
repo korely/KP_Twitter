@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-public class User implements PersistenceEntity {
+public class User implements PersistenceEntity, Comparable<User> {
 
     private Long userId;
     private String login;
@@ -18,12 +18,23 @@ public class User implements PersistenceEntity {
     private Set<User> following;
 
 
-    public User(){
+    public User() {
 
     }
-    public User(String login, String nickname){
-        this.login=login;
-        this.nickname=nickname;
+
+    public User(String login, String nickname) {
+        this.login = login;
+        this.nickname = nickname;
+        this.dateRegistered = LocalDateTime.now();
+        this.followers = new HashSet<>();
+        this.following = new HashSet<>();
+
+    }
+
+    public User(String login, String nickname, String about) {
+        this.login = login;
+        this.nickname = nickname;
+        this.about = about;
         this.dateRegistered = LocalDateTime.now();
         this.followers = new HashSet<>();
         this.following = new HashSet<>();
@@ -39,6 +50,13 @@ public class User implements PersistenceEntity {
         this.about = about;
         this.followers = followers;
         this.following = following;
+    }
+
+    public User(long id, String login, String nickname, String about) {
+        this.userId = id;
+        this.login = login;
+        this.nickname = nickname;
+        this.about = about;
     }
 
 
@@ -118,17 +136,18 @@ public class User implements PersistenceEntity {
 
     @Override
     public String toString() {
-        return "User{" +
+        return "\n" +
                 "userId=" + userId +
                 ", login='" + login + '\'' +
                 ", nickname='" + nickname + '\'' +
-                '}';
+                ", about='" + about + '\'';
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+
         User user = (User) o;
         return Objects.equals(userId, user.userId) &&
                 login.equals(user.login);
@@ -139,4 +158,9 @@ public class User implements PersistenceEntity {
         return Objects.hash(userId, login);
     }
 
+
+    @Override
+    public int compareTo(User o) {
+        return this.getId().compareTo(o.userId);
+    }
 }
