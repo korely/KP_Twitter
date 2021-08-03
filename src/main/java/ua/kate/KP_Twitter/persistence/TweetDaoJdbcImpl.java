@@ -11,6 +11,7 @@ import java.util.TreeSet;
 public class TweetDaoJdbcImpl implements TweetDao {
 
     Connection connection;
+
     {
         try {
             connection = H2Connection.getInstance().getConnection();
@@ -26,7 +27,7 @@ public class TweetDaoJdbcImpl implements TweetDao {
                 ", content) VALUES (?, ?)";
 
         try {
-            PreparedStatement statement = connection.prepareStatement(sql);
+            PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             statement.setLong(1, model.getUser().getId());
             statement.setString(2, model.getContent());
             int result = statement.executeUpdate();
@@ -59,14 +60,14 @@ public class TweetDaoJdbcImpl implements TweetDao {
                 long id = rs.getLong("tweetId");
                 long userId = rs.getLong("userId");
                 String content = rs.getString("content");
-                
+
                 UserDaoJdbcImpl udji = new UserDaoJdbcImpl();
                 Optional<User> user = udji.findById(userId);
-                
+
                 if(user.isPresent()){
                     tweet = new Tweet(id, content, user.get());
                 }
-                
+
                 allTweets.add(tweet);
             }
 

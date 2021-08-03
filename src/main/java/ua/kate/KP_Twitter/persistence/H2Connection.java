@@ -12,7 +12,6 @@ public class H2Connection {
     private static String driver = "org.h2.Driver";
 
     private H2Connection() throws SQLException {
-
         try {
             Class.forName(driver);
         } catch (ClassNotFoundException e) {

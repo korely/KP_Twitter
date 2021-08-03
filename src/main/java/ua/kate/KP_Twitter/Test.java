@@ -17,7 +17,7 @@ public class Test {
         user.setId(25L);
         user.setAbout("My name is John");
 
-        User user2 = new User("Eric434", "Eric");
+        User user2 = new User("Eric434", "Eric", "about");
         user2.setId(24L);
 
         User user3 = new User("New3434", "NewOne", "About description");
@@ -62,11 +62,11 @@ public class Test {
         //UPDATEUBYID
 
 //        System.out.println(userDao.findById(24L));
-//        userDao.updateById(24L, userEricHaha);
+//        userDao.updateById(24L, user2);
 //        System.out.println(userDao.findById(24L));
 
         //DELETEBYID
-//        userDao.deleteById(user.getId());
+//        userDao.deleteById(15L);
 
         //GETALL
         System.out.println(userDao.getAll());
@@ -84,7 +84,7 @@ public class Test {
 
         //FINDUSERBYID
 
-//        Optional<Tweet> tweet2FromDB = userDao.findById(25);
+//        Optional<Tweet> tweet2FromDB = tweetDao.findById(15L);
 //        System.out.println(tweet2FromDB);
 
         //UPDATEUBYID

@@ -65,11 +65,9 @@ public class UserDaoJdbcImpl implements UserDao {
 
                 allUsers.add(user);
             }
-
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-
         return allUsers;
     }
 
@@ -110,7 +108,6 @@ public class UserDaoJdbcImpl implements UserDao {
             statement.setString(2, model.getNickname());
             statement.setString(3, model.getAbout());
             statement.executeUpdate();
-
         } catch (
                 SQLException throwables) {
             throwables.printStackTrace();
