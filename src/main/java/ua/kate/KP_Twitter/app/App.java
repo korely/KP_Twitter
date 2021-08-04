@@ -1,4 +1,4 @@
-package ua.kate.KP_Twitter;
+package ua.kate.KP_Twitter.app;
 
 import static ua.kate.KP_Twitter.config.Configurator.initApp;
 
@@ -9,7 +9,7 @@ public class App {
     }
 
     public static void main(String[] args) {
-        //parse initial arguments and configure the app
+        //parse initial arguments and configure the ua.kate.KP_Twitter.app
 
         initApp(args);
         //run

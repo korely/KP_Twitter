@@ -1,6 +1,7 @@
-package ua.kate.KP_Twitter.persistence;
+package ua.kate.KP_Twitter.persistence.dao;
 
 import ua.kate.KP_Twitter.model.Tweet;
+import ua.kate.KP_Twitter.persistence.dao.TweetDao;
 import ua.kate.KP_Twitter.storage.Storage;
 
 import java.util.Optional;
