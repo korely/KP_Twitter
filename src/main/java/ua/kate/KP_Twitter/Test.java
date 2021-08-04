@@ -3,7 +3,10 @@ package ua.kate.KP_Twitter;
 import ua.kate.KP_Twitter.model.Tweet;
 import ua.kate.KP_Twitter.model.User;
 import ua.kate.KP_Twitter.model.UserFeed;
-import ua.kate.KP_Twitter.persistence.*;
+import ua.kate.KP_Twitter.persistence.dao.TweetDao;
+import ua.kate.KP_Twitter.persistence.dao.TweetDaoJdbcImpl;
+import ua.kate.KP_Twitter.persistence.dao.UserDao;
+import ua.kate.KP_Twitter.persistence.dao.UserDaoJdbcImpl;
 
 import java.util.*;
 

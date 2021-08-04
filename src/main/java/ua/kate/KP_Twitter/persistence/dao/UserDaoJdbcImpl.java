@@ -1,6 +1,7 @@
-package ua.kate.KP_Twitter.persistence;
+package ua.kate.KP_Twitter.persistence.dao;
 
 import ua.kate.KP_Twitter.model.User;
+import ua.kate.KP_Twitter.persistence.H2Connection;
 
 import java.sql.*;
 import java.util.*;

@@ -1,7 +1,8 @@
 package ua.kate.KP_Twitter.config;
 
-public class Configuration {
+import ua.kate.KP_Twitter.persistence.dao.DaoType;
 
+public class Configuration {
 
     private final DaoType daoType;
     private final boolean initDb;
@@ -27,20 +28,6 @@ public class Configuration {
 
     public boolean populateDb() {
         return populateDb;
-    }
-
-    public enum DaoType {
-        IN_MEM("inMem"), JDBC("jdbc");
-
-        private final String value;
-
-        DaoType(String value) {
-            this.value = value;
-        }
-
-        public String value() {
-            return value;
-        }
     }
 
     public static class ConfigBuilder {

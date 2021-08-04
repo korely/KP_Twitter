@@ -6,6 +6,10 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+import ua.kate.KP_Twitter.app.AppContext;
+import ua.kate.KP_Twitter.persistence.dao.TweetDao;
+import ua.kate.KP_Twitter.persistence.dao.UserDao;
+import ua.kate.KP_Twitter.persistence.factory.DaoAbstractFactory;
 
 public class Configurator {
 
@@ -19,16 +23,15 @@ public class Configurator {
         // parse params
 
         Configuration config = parseArgs(args);
+
         //init app
         // init dao type
-        if (config.getDaoType() == Configuration.DaoType.IN_MEM) {
-            // initDb();
-            //use in mem db
-        } else if (config.getDaoType() == Configuration.DaoType.JDBC) {
-            //use JDBC db
-        } else {
-            throw new RuntimeException("SAD! Could not resolve db type");
-        }
+
+        DaoAbstractFactory factory = new DaoAbstractFactory(config.getDaoType());
+        UserDao userDao = (UserDao) factory.createUserDao();
+        TweetDao tweetDao = (TweetDao) factory.createTweetDao();
+
+        AppContext appContext = new AppContext(config, userDao, tweetDao);
 
         if (config.initDb()) {
             //init db
