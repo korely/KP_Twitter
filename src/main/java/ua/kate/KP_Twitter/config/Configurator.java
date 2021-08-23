@@ -7,9 +7,12 @@ import org.apache.commons.cli.ParseException;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import ua.kate.KP_Twitter.app.AppContext;
+import ua.kate.KP_Twitter.handler.ExitHandler;
+import ua.kate.KP_Twitter.handler.HelpHandler;
 import ua.kate.KP_Twitter.persistence.dao.TweetDao;
 import ua.kate.KP_Twitter.persistence.dao.UserDao;
 import ua.kate.KP_Twitter.persistence.factory.DaoAbstractFactory;
+import ua.kate.KP_Twitter.service.UserService;
 
 public class Configurator {
 
@@ -18,6 +21,9 @@ public class Configurator {
     public static final String DAO_TYPE = "daoType";
     public static final String INIT_DB = "initDb";
     public static final String POPULATE_DB = "populateDb";
+    public static UserService userService = null;
+    public static ExitHandler exitHandler = null;
+    public static HelpHandler helpHandler = null;
 
     public static void initApp(String[] args) {
         // parse params
@@ -30,6 +36,10 @@ public class Configurator {
         DaoAbstractFactory factory = new DaoAbstractFactory(config.getDaoType());
         UserDao userDao = (UserDao) factory.createUserDao();
         TweetDao tweetDao = (TweetDao) factory.createTweetDao();
+
+        userService = new UserService(userDao);
+        exitHandler = new ExitHandler(null);
+        helpHandler = new HelpHandler(exitHandler);
 
         AppContext appContext = new AppContext(config, userDao, tweetDao);
 
@@ -45,11 +55,13 @@ public class Configurator {
 
     }
 
+
+
     private static Configuration parseArgs(String[] args) {
         Options options = new Options();
         options.addRequiredOption("dt", DAO_TYPE, true, "choose dao type for this run");
         options.addOption(INIT_DB, false, "flag for initial creation of the DB");
-        options.addOption(POPULATE_DB, false, "flag for populationn the DB with fake data for a showdown");
+        options.addOption(POPULATE_DB, false, "flag for population the DB with fake data for a showdown");
         try {
             CommandLine cmd = new DefaultParser().parse(options, args);
             Configuration config;

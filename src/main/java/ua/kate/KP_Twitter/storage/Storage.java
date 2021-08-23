@@ -7,7 +7,7 @@ import java.util.*;
 
 public final class Storage {
     private final Map<Long, Tweet> tweetStorage = new HashMap<>();
-    private final Map<Long, User> userStorage = new HashMap<>();
+    private static final Map<Long, User> userStorage = new HashMap<>();
 
 
     private long userSequence = 0;
@@ -24,7 +24,7 @@ public final class Storage {
         return StorageHolder.storage;
     }
 
-    public Set<User> getUsers() {
+    public static Set<User> getUsers() {
         Set<User> result = new HashSet<>();
         for (User user : userStorage.values()) {
 //            User userCopy = createUserCopy(user);
